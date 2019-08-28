@@ -1,0 +1,804 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use dbda19;
+Database changed
+mysql> CREATE table Member
+    -> (
+    -> MembID int AUTO_INCREMENT primary key,
+    -> FName Varchar(20) NOT NULL, MName varchar(20), LName varchar(20) NOT NULL,
+    -> Memb_DOJ date, Email varchar(30), Phone char(10),
+    -> Mem_type ENUM('Regular','Silver','Gold','Platinum')
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> CREATE table Book
+    -> (
+    -> BookID int AUTO_INCREMENT , BookName varchar(50) NOT NULL, Price decimal(6,2)
+    -> );
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql>
+mysql> CREATE table Book
+    -> (
+    -> BookID int AUTO_INCREMENT primary key, BookName varchar(50) NOT NULL, Price decimal(6,2)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DESCRIBE Member;
++----------+--------------------------------------------+------+-----+---------+----------------+
+| Field    | Type                                       | Null | Key | Default | Extra          |
++----------+--------------------------------------------+------+-----+---------+----------------+
+| MembID   | int(11)                                    | NO   | PRI | NULL    | auto_increment |
+| FName    | varchar(20)                                | NO   |     | NULL    |                |
+| MName    | varchar(20)                                | YES  |     | NULL    |                |
+| LName    | varchar(20)                                | NO   |     | NULL    |                |
+| Memb_DOJ | date                                       | YES  |     | NULL    |                |
+| Email    | varchar(30)                                | YES  |     | NULL    |                |
+| Phone    | char(10)                                   | YES  |     | NULL    |                |
+| Mem_type | enum('Regular','Silver','Gold','Platinum') | YES  |     | NULL    |                |
++----------+--------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+
+mysql> DESCRIBE book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql> ALTER TABLE Book
+    -> ADD COLUMN Author varchar(20) NOT NULL;
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
+| Author   | varchar(20)  | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE Book
+    -> MODIFY COLUMN Author varchar(30) NOT NULL;
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
+| Author   | varchar(30)  | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE Book
+    -> DROP COLUMN Author;
+Query OK, 0 rows affected (0.24 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE Book
+    -> ADD COLUMN Author varchar(20) NOT NULL;
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
+| Author   | varchar(20)  | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE Book
+    -> DELETE COLUMN Author;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DELETE COLUMN Author' at line 2
+mysql>
+mysql> ALTER TABLE Member
+    -> ADD CONSTRAINT Member_Email_UQ
+    -> UNIQUE (Email);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE Member;
++----------+--------------------------------------------+------+-----+---------+----------------+
+| Field    | Type                                       | Null | Key | Default | Extra          |
++----------+--------------------------------------------+------+-----+---------+----------------+
+| MembID   | int(11)                                    | NO   | PRI | NULL    | auto_increment |
+| FName    | varchar(20)                                | NO   |     | NULL    |                |
+| MName    | varchar(20)                                | YES  |     | NULL    |                |
+| LName    | varchar(20)                                | NO   |     | NULL    |                |
+| Memb_DOJ | date                                       | YES  |     | NULL    |                |
+| Email    | varchar(30)                                | YES  | UNI | NULL    |                |
+| Phone    | char(10)                                   | YES  |     | NULL    |                |
+| Mem_type | enum('Regular','Silver','Gold','Platinum') | YES  |     | NULL    |                |
++----------+--------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+
+mysql> show constraint;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'constraint' at line 1
+mysql> INSERT INTO Member
+    -> (FName, MName, LName, Memb_DOJ, Email, Phone, Mem_Type)
+    -> VALUES
+    -> ('Sancket', NULL, 'SAWANT', 20190819,'abc123@gmail.com', '1234567890', 'Platinum');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT * FROM Member;
++--------+---------+-------+--------+------------+------------------+------------+----------+
+| MembID | FName   | MName | LName  | Memb_DOJ   | Email            | Phone      | Mem_type |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+|      1 | Sancket | NULL  | SAWANT | 2019-08-19 | abc123@gmail.com | 1234567890 | Platinum |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO Member
+    -> (FName, MName, LName, Memb_DOJ, Email, Phone, Mem_Type)
+    -> VALUES
+    -> ('Girish','D.','Dukare',now(),'abc123@gmail.com', '9876543210','Gold');
+ERROR 1062 (23000): Duplicate entry 'abc123@gmail.com' for key 'Member_Email_UQ'
+mysql> INSERT INTO Member
+    -> (FName, MName, LName, Memb_DOJ, Email, Phone, Mem_Type)
+    -> VALUES
+    -> ('Girish','D.','Dukare',now(),'abc123@mail.com', '9876543210','Gold');
+Query OK, 1 row affected, 1 warning (0.04 sec)
+
+mysql> SELECT * FROM Member;
++--------+---------+-------+--------+------------+------------------+------------+----------+
+| MembID | FName   | MName | LName  | Memb_DOJ   | Email            | Phone      | Mem_type |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+|      1 | Sancket | NULL  | SAWANT | 2019-08-19 | abc123@gmail.com | 1234567890 | Platinum |
+|      3 | Girish  | D.    | Dukare | 2019-08-27 | abc123@mail.com  | 9876543210 | Gold     |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> rollback savepoint A;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'savepoint A' at line 1
+mysql> DELETE FROM Member Where MembID='3';
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * FROM Member;
++--------+---------+-------+--------+------------+------------------+------------+----------+
+| MembID | FName   | MName | LName  | Memb_DOJ   | Email            | Phone      | Mem_type |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+|      1 | Sancket | NULL  | SAWANT | 2019-08-19 | abc123@gmail.com | 1234567890 | Platinum |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO Member
+    -> (FName, MName, LName, Memb_DOJ, Email, Phone, Mem_Type)
+    -> VALUES
+    -> ('Girish','D.','Dukare',now(),'abc123@mail.com', '9876543210','Gold');
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> SELECT * FROM Member;
++--------+---------+-------+--------+------------+------------------+------------+----------+
+| MembID | FName   | MName | LName  | Memb_DOJ   | Email            | Phone      | Mem_type |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+|      1 | Sancket | NULL  | SAWANT | 2019-08-19 | abc123@gmail.com | 1234567890 | Platinum |
+|      4 | Girish  | D.    | Dukare | 2019-08-27 | abc123@mail.com  | 9876543210 | Gold     |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT now(),
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int REFERENCES Member(MembID)
+    -> );
+ERROR 1067 (42000): Invalid default value for 'TranDate'
+mysql>
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime now(),
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'now(),
+BookID int REFERENCES Book(BookID),
+MemberID int REFERENCES Member(MembID' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int REFERENCES Book(BookID),
+MemberID int REFERENCES Member(MembID)
+)' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MembID)
+    -> REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int REFERENCES Book(BookID),
+MemberID int,
+CONSTRAINT BookTran_MembID_FK' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int ,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MembID)
+    -> REFERENCES Member(MembID)
+    -> CONSTRAINT BookTran_bOOK_FK
+    -> FOREIGN KEY(BookID )
+    -> REFERENCES Book(BookID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int ,
+MemberID int,
+CONSTRAINT BookTran_MembID_FK
+FOREIGN KEY(MembID)
+RE' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int ,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID)
+    -> CONSTRAINT BookTran_bOOK_FK
+    -> FOREIGN KEY(BookID )
+    -> REFERENCES Book(BookID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int ,
+MemberID int,
+CONSTRAINT BookTran_MembID_FK
+FOREIGN KEY(MemberID)
+' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int ,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID),
+    -> CONSTRAINT BookTran_bOOK_FK
+    -> FOREIGN KEY(BookID )
+    -> REFERENCES Book(BookID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int ,
+MemberID int,
+CONSTRAINT BookTran_MembID_FK
+FOREIGN KEY(MemberID)
+' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int ,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int ,
+MemberID int,
+CONSTRAINT BookTran_MembID_FK
+FOREIGN KEY(MemberID)
+' at line 4
+mysql>
+mysql>
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int ,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int ,
+MemberID int,
+CONSTRAINT BookTran_MembID_FK
+FOREIGN KEY(MemberID)
+' at line 4
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BookID )
+    -> REFERENCES Book(BookID),
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int,
+MemberID int,
+CONSTRAINT BookTran_BookID_FK
+FOREIGN KEY(BookID )
+RE' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BooksID int,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BooksID )
+    -> REFERENCES Book(BookID),
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID),
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BooksID int,
+MemberID int,
+CONSTRAINT BookTran_BookID_FK
+FOREIGN KEY(BooksID )
+' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BooksID int,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BooksID )
+    -> REFERENCES Book(BookID),
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BooksID int,
+MemberID int,
+CONSTRAINT BookTran_BookID_FK
+FOREIGN KEY(BooksID )
+' at line 4
+mysql> INSERT INTO BOOK
+    -> ( BookName, Price, Author)
+    -> VALUES
+    -> ('Let us Know C',530.12,'Yashwant Kanitkar');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> SELECT * From Book;
++--------+---------------+--------+-------------------+
+| BookID | BookName      | Price  | Author            |
++--------+---------------+--------+-------------------+
+|      1 | Let us Know C | 530.12 | Yashwant Kanitkar |
++--------+---------------+--------+-------------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO BOOK
+    -> ( BookName, Price, Author)
+    -> VALUES
+    -> ('Let us Know C++',500.12,'BALAGURU SWAMI');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> SELECT * From Book;
++--------+-----------------+--------+-------------------+
+| BookID | BookName        | Price  | Author            |
++--------+-----------------+--------+-------------------+
+|      1 | Let us Know C   | 530.12 | Yashwant Kanitkar |
+|      2 | Let us Know C++ | 500.12 | BALAGURU SWAMI    |
++--------+-----------------+--------+-------------------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BooksID int,
+    -> MemberID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BooksID )
+    -> REFERENCES Book(BookID),
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BooksID int,
+MemberID int,
+CONSTRAINT BookTran_BookID_FK
+FOREIGN KEY(BooksID )
+' at line 4
+mysql>
+
+
+
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use database dbda19
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use database dbda19;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use dbda19;
+Database changed
+mysql> DESCRIBE Member;
++----------+--------------------------------------------+------+-----+---------+----------------+
+| Field    | Type                                       | Null | Key | Default | Extra          |
++----------+--------------------------------------------+------+-----+---------+----------------+
+| MembID   | int(11)                                    | NO   | PRI | NULL    | auto_increment |
+| FName    | varchar(20)                                | NO   |     | NULL    |                |
+| MName    | varchar(20)                                | YES  |     | NULL    |                |
+| LName    | varchar(20)                                | NO   |     | NULL    |                |
+| Memb_DOJ | date                                       | YES  |     | NULL    |                |
+| Email    | varchar(30)                                | YES  | UNI | NULL    |                |
+| Phone    | char(10)                                   | YES  |     | NULL    |                |
+| Mem_type | enum('Regular','Silver','Gold','Platinum') | YES  |     | NULL    |                |
++----------+--------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.03 sec)
+
+mysql> SELECT * From Member;
++--------+---------+-------+--------+------------+------------------+------------+----------+
+| MembID | FName   | MName | LName  | Memb_DOJ   | Email            | Phone      | Mem_type |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+|      1 | Sancket | NULL  | SAWANT | 2019-08-19 | abc123@gmail.com | 1234567890 | Platinum |
+|      4 | Girish  | D.    | Dukare | 2019-08-27 | abc123@mail.com  | 9876543210 | Gold     |
++--------+---------+-------+--------+------------+------------------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> Describe Book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| BookID   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| BookName | varchar(50)  | NO   |     | NULL    |                |
+| Price    | decimal(6,2) | YES  |     | NULL    |                |
+| Author   | varchar(20)  | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.02 sec)
+
+mysql> SELECT * From Book;
++--------+-----------------+--------+-------------------+
+| BookID | BookName        | Price  | Author            |
++--------+-----------------+--------+-------------------+
+|      1 | Let us Know C   | 530.12 | Yashwant Kanitkar |
+|      2 | Let us Know C++ | 500.12 | BALAGURU SWAMI    |
++--------+-----------------+--------+-------------------+
+2 rows in set (0.00 sec)
+
+mysql>
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BookID )REFERENCES Book(BookID),
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FKFOREIGN KEY(MemberID)
+    -> REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int,
+CONSTRAINT BookTran_BookID_FK
+FOREIGN KEY(BookID )REFERENCES Book(B' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int REFERENCES Book(BookID),
+MemberID int REFERENCES Member(MembID)
+)' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int REFERENCES Book(BookID),
+MemberID int REFERENCES Member(MembID)
+)' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BookID) REFERENCES Book(BookID),
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID) REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int,
+CONSTRAINT BookTran_BookID_FK
+FOREIGN KEY(BookID) REFERENCES Book(B' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime ,
+    -> BookID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BookID) REFERENCES Book(BookID),
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID) REFERENCES Member(MembID)
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> describe booktran;
++----------+----------+------+-----+---------+----------------+
+| Field    | Type     | Null | Key | Default | Extra          |
++----------+----------+------+-----+---------+----------------+
+| TranID   | int(11)  | NO   | PRI | NULL    | auto_increment |
+| TranDate | datetime | YES  |     | NULL    |                |
+| BookID   | int(11)  | YES  | MUL | NULL    |                |
+| MemberID | int(11)  | YES  | MUL | NULL    |                |
++----------+----------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> select *
+    -> drop table booktran;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'drop table booktran' at line 2
+mysql> drop table booktran;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> describe booktran;
+ERROR 1146 (42S02): Table 'dbda19.booktran' doesn't exist
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime DEFAULT,
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int REFERENCES Member(MembID)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+BookID int REFERENCES Book(BookID),
+MemberID int REFERENCES Member(MembID)
+)' at line 4
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime ,
+    -> BookID int REFERENCES Book(BookID),
+    -> MemberID int REFERENCES Member(MembID)
+    -> );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> describe booktran;
++----------+----------+------+-----+---------+----------------+
+| Field    | Type     | Null | Key | Default | Extra          |
++----------+----------+------+-----+---------+----------------+
+| TranID   | int(11)  | NO   | PRI | NULL    | auto_increment |
+| TranDate | datetime | YES  |     | NULL    |                |
+| BookID   | int(11)  | YES  |     | NULL    |                |
+| MemberID | int(11)  | YES  |     | NULL    |                |
++----------+----------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> drop table booktran;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TABLE BookTran
+    -> (
+    -> TranID int AUTO_INCREMENT primary key,
+    -> TranDate datetime ,
+    -> BookID int,
+    -> CONSTRAINT BookTran_BookID_FK
+    -> FOREIGN KEY(BookID) REFERENCES Book(BookID),
+    -> MemberID int,
+    -> CONSTRAINT BookTran_MembID_FK
+    -> FOREIGN KEY(MemberID) REFERENCES Member(MembID)
+    -> );
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> describe booktran;
++----------+----------+------+-----+---------+----------------+
+| Field    | Type     | Null | Key | Default | Extra          |
++----------+----------+------+-----+---------+----------------+
+| TranID   | int(11)  | NO   | PRI | NULL    | auto_increment |
+| TranDate | datetime | YES  |     | NULL    |                |
+| BookID   | int(11)  | YES  | MUL | NULL    |                |
+| MemberID | int(11)  | YES  | MUL | NULL    |                |
++----------+----------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO BookTran
+    -> (
+    -> TranDate, BookID, MemberID)
+    -> VALUES(now(),1,1);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> Select * from BookTran;
++--------+---------------------+--------+----------+
+| TranID | TranDate            | BookID | MemberID |
++--------+---------------------+--------+----------+
+|      1 | 2019-08-27 19:38:36 |      1 |        1 |
++--------+---------------------+--------+----------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO BookTran
+    -> (TranDate, BookID, MemberID)
+    -> VALUES(now(), 1,2);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`dbda19`.`booktran`, CONSTRAINT `BookTran_MembID_FK` FOREIGN KEY (`MemberID`) REFERENCES `member` (`MembID`))
+mysql> INSERT INTO BookTran
+    -> (TranDate, BookID, MemberID)
+    -> VALUES(now(), 1,4);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> Select * from BookTran;
++--------+---------------------+--------+----------+
+| TranID | TranDate            | BookID | MemberID |
++--------+---------------------+--------+----------+
+|      1 | 2019-08-27 19:38:36 |      1 |        1 |
+|      3 | 2019-08-27 19:42:34 |      1 |        4 |
++--------+---------------------+--------+----------+
+2 rows in set (0.00 sec)
+
+mysql> DELETE From book where MembID='1';
+ERROR 1054 (42S22): Unknown column 'MembID' in 'where clause'
+mysql> DELETE From book where BookID='1';
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`dbda19`.`booktran`, CONSTRAINT `BookTran_BookID_FK` FOREIGN KEY (`BookID`) REFERENCES `book` (`BookID`))
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> SELECT BookID, BookName, Price, Price*.10 As Tax
+    -> From Book
+    -> Where Price*.10>12;
++--------+-----------------+--------+---------+
+| BookID | BookName        | Price  | Tax     |
++--------+-----------------+--------+---------+
+|      1 | Let us Know C   | 530.12 | 53.0120 |
+|      2 | Let us Know C++ | 500.12 | 50.0120 |
++--------+-----------------+--------+---------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT BookID, BookName, Price, Price*.10 As Tax
+    ->
+    ->
+    -> ;
+ERROR 1054 (42S22): Unknown column 'BookID' in 'field list'
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where BookName ='Let';
+Empty set (0.01 sec)
+
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where BookName LIKE '%L';
+Empty set (0.00 sec)
+
+mysql> select * from book;
++--------+-----------------+--------+-------------------+
+| BookID | BookName        | Price  | Author            |
++--------+-----------------+--------+-------------------+
+|      1 | Let us Know C   | 530.12 | Yashwant Kanitkar |
+|      2 | Let us Know C++ | 500.12 | BALAGURU SWAMI    |
++--------+-----------------+--------+-------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where BookName LIKE '%e%';
++--------+-----------------+--------+
+| BookID | BookName        | Price  |
++--------+-----------------+--------+
+|      1 | Let us Know C   | 530.12 |
+|      2 | Let us Know C++ | 500.12 |
++--------+-----------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where BookName LIKE '%3%';
+Empty set (0.00 sec)
+
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where BookName LIKE 'L__';
+Empty set (0.00 sec)
+
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where length(BookName)=12;
+Empty set (0.00 sec)
+
+mysql> SELECT LENGth(BookNAme)
+    -> From Book;
++------------------+
+| LENGth(BookNAme) |
++------------------+
+|               13 |
+|               15 |
++------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where length(BookName)=13;
++--------+---------------+--------+
+| BookID | BookName      | Price  |
++--------+---------------+--------+
+|      1 | Let us Know C | 530.12 |
++--------+---------------+--------+
+1 row in set (0.00 sec)
+
+mysql> SELECT BookID, BookName, Price
+    -> From Book
+    -> Where length(Price)=6;
++--------+-----------------+--------+
+| BookID | BookName        | Price  |
++--------+-----------------+--------+
+|      1 | Let us Know C   | 530.12 |
+|      2 | Let us Know C++ | 500.12 |
++--------+-----------------+--------+
+2 rows in set (0.00 sec)
+
+mysql>
